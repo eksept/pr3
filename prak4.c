@@ -2,6 +2,12 @@
 #include <stdlib.h>
 #include <math.h>
 
+void swap(double *a, double *b) {
+    double temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
 void selectionSort(double *arr, int size) {
     for (int i = 0; i < size - 1; i++) {
         int minIndex = i;
@@ -10,44 +16,61 @@ void selectionSort(double *arr, int size) {
                 minIndex = j;
             }
         }
-        double temp = arr[i];
-        arr[i] = arr[minIndex];
-        arr[minIndex] = temp;
+        swap(&arr[i], &arr[minIndex]);
     }
 }
 
 int main() {
     int n, count = 0;
+
     printf("Введите размер массива: ");
-    scanf("%d", &n);
-    
-    double *b = (double *)malloc(n * sizeof(double));
-    double *c = (double *)malloc(n * sizeof(double));
-    if (!b || !c) {
-        printf("Ошибка памяти\n");
+    if (scanf("%d", &n) != 1 || n <= 0) {
+        printf("Ошибка: размер массива должен быть положительным числом.\n");
         return 1;
     }
-    
+
+    double *inputArray = (double *)malloc(n * sizeof(double));
+    if (!inputArray) {
+        printf("Ошибка выделения памяти\n");
+        return 1;
+    }
+
     printf("Введите %d чисел массива: ", n);
     for (int i = 0; i < n; i++) {
-        scanf("%lf", &b[i]);
-        if (b[i] > 0) {
-            c[count++] = sqrt(b[i]) / 5.0;
+        scanf("%lf", &inputArray[i]);
+        if (inputArray[i] > 0) {
+            count++;
         }
     }
-    
+
     if (count > 0) {
-        selectionSort(c, count);
-        printf("Отсортированный массив C: ");
+        double *processedArray = (double *)malloc(count * sizeof(double));
+        if (!processedArray) {
+            printf("Ошибка выделения памяти\n");
+            free(inputArray);
+            return 1;
+        }
+
+        int index = 0;
+        for (int i = 0; i < n; i++) {
+            if (inputArray[i] > 0) {
+                processedArray[index++] = sqrt(inputArray[i]) / 5.0;
+            }
+        }
+
+        selectionSort(processedArray, count);
+
+        printf("Отсортированный массив: ");
         for (int i = 0; i < count; i++) {
-            printf("%.2f ", c[i]);
+            printf("%.2f ", processedArray[i]);
         }
         printf("\n");
+
+        free(processedArray);
     } else {
         printf("Нет положительных чисел для обработки.\n");
     }
-    
-    free(b);
-    free(c);
+
+    free(inputArray);
     return 0;
 }

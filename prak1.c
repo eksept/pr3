@@ -1,18 +1,18 @@
 #include <stdio.h>
 
-void processNumbers(int *x, int *y) {
-    *x *= 2;  
-    *y /= 2;  
+void modifyValues(int *num1, int *num2) {
+    *num1 *= 2;
+    *num2 /= 2;
 }
 
 int main() {
-    int a, b;
+    int first, second;
+
     printf("Введите два числа: ");
-    scanf("%d %d", &a, &b);
-    
-    int *ptrO = &a, *ptrG = &b;
-    processNumbers(ptrO, ptrG);
-    
-    printf("Result: a = %d, b = %d\n", a, b);
+    scanf("%d %d", &first, &second);
+
+    modifyValues(&first, &second);
+
+    printf("Result: first = %d, second = %d\n", first, second);
     return 0;
 }
